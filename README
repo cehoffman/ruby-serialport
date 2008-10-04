@@ -1,6 +1,6 @@
------Ruby/SerialPort-----
+=Ruby-SerialPort
 
--- Description --
+== Description
 
 Ruby/SerialPort is a Ruby library that provides a class for using
 RS-232 serial ports.  This class also contains low-level functions to
@@ -8,62 +8,54 @@ check and set the current state of the signals on the line.
 
 The native Windows version of this library supports Microsoft's Visual C++
 and Borland's C++ compilers.
+== Installation
 
--- Installation --
+    $ ruby extconf.rb
+    $ make
+    $ make install
 
-$ ruby extconf.rb
-$ make
-$ make install
+== Testing
 
+<tt>test/miniterm.rb</tt>:: Ruby's copy of miniterm.c!
 
--- Testing --
+== API
 
-* test/miniterm.rb
+=== Class SerialPort, Parent IO
 
-Ruby's copy of miniterm.c !
+==== Class constants
 
+    VERSION -> aString (this release is "0.6")
+    NONE, HARD, SOFT, SPACE, MARK, EVEN, ODD -> anInteger
 
--- API --
+==== Class methods
 
-  **** Class SerialPort, Parent IO ****
+    * new(port_num [, modem_parameters]) -> aSerialPort
+    * open(port_num [, modem_parameters]) -> aSerialPort
+    * open(port_num [, modem_parameters]) {|aSerialPort| block} -> 
+    value of the block
 
-    ** Class constants **
-
-       VERSION -> aString (this release is "0.6")
-       NONE, HARD, SOFT, SPACE, MARK, EVEN, ODD -> anInteger
-
-    ** Class methods **
-
-      * new(port_num [, modem_parameters]) -> aSerialPort
-      * open(port_num [, modem_parameters]) -> aSerialPort
-      * open(port_num [, modem_parameters]) {|aSerialPort| block} ->
-                value of the block
-
-        port_num -> anInteger: port number, 0 for first port which is
-                      "/dev/ttyS0" on GNU/Linux and "COM1" on Windows,
+    port_num -> anInteger: port number, 0 for first port which is
+                "/dev/ttyS0" on GNU/Linux and "COM1" on Windows,
                 or  aString: file name of the device (example: "/dev/ttyS2")
 
-        Optional modem_parameters:
+==== Optional modem_parameters:
 
-        baudrate -> anInteger: from 50 to 256000, depends on platform.
+    * baudrate -> anInteger: from 50 to 256000, depends on platform.
+    * databits -> anInteger: from 5 to 8 (4 is allowed on Windows)
+    * stopbits -> anInteger: 1 or 2 (1.5 is not supported)
+    * parity -> anInteger: SerialPort::NONE, SerialPort::EVEN,
+    * SerialPort::ODD, SerialPort::MARK, SerialPort::SPACE
+(MARK and SPACE are not supported on Posix)
 
-        databits -> anInteger: from 5 to 8 (4 is allowed on Windows)
+Raise an argError on bad argument.
 
-        stopbits -> anInteger: 1 or 2 (1.5 is not supported)
-
-        parity -> anInteger: SerialPort::NONE, SerialPort::EVEN,
-                  SerialPort::ODD, SerialPort::MARK, SerialPort::SPACE
-                  (MARK and SPACE are not supported on Posix)
-
-        Raise an argError on bad argument.
-
-        SerialPort::new and SerialPort::open without a block return an
-        instance of SerialPort.  SerialPort::open with a block passes
-        a SerialPort to the block and closes it when the block exits
-        (like File::open).
+SerialPort::new and SerialPort::open without a block return an
+instance of SerialPort.  SerialPort::open with a block passes
+a SerialPort to the block and closes it when the block exits
+(like File::open).
 
 
-    ** Instance methods **
+==== Instance methods
 
       * modem_params() -> aHash
       * modem_params=(aHash) -> aHash
@@ -145,9 +137,9 @@ Ruby's copy of miniterm.c !
 
         Note: Under Windows, rts() and dtr() are not implemented.
 
--- License --
+== License
 
-GPL
+:include: LICENSE
 
-Guillaume Pierronnet <moumar@netcourrier.com>
-Alan Stern <stern@rowland.harvard.edu>
+Guillaume Pierronnet:: <moumar@netcourrier.com>
+Alan Stern:: <stern@rowland.harvard.edu>

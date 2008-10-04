@@ -1,28 +1,28 @@
 require 'rubygems'
-Gem::manage_gems
 require 'rake/gempackagetask'
+require 'rake/rdoctask'
 
-spec = Gem::Specification.new do |s|
-   s.platform = Gem::Platform::CURRENT
-   s.name = 'ruby-serialport'
-   s.version = "0.7.0"
-   s.summary = "Ruby/SerialPort is a Ruby library that provides a class for using RS-232 serial ports."
-
-   s.files = Dir.glob("{doc,src,lib,test}/**/*").delete_if { |item| item.include?( ".svn" ) }
-   s.files.concat [ "README", "CHANGELOG" ]
-   s.extensions << 'extconf.rb'
-   s.has_rdoc = true
-   s.extra_rdoc_files = [ "README", "src/serialport.c", "src/serialport.h" ]
-   s.rdoc_options = [ "--main", "README" ]
-   s.authors = ["Guillaume Pierronnet", "Alan Stern", "Daniel E. Shipton"]
-   s.email = "daniel.shipton.oss@gmail.com"
-   s.homepage = "http://ruby-serialport.rubyforge.org"
-end
+# as seen from 'amazon-ec2' gem packge on git-hub - read gemspec file, eval,
+# and assign it to spec to keep DRY coding principles
+spec = eval(IO.read("ruby-serialport.gemspec"))
 
 Rake::GemPackageTask.new(spec) do |pkg|
-   pkg.need_tar = true
+#   pkg.need_tar = true
+   pkg.gem_spec = spec
 end
 
-task :default => "pkg/#{spec.name}-#{spec.version}-#{spec.platform}.gem" do
-   puts " #{spec.name} => pkg/#{spec.name}-#{spec.version}-#{spec.platform}.gem generated"
+task :install => [:package] do
+  sh %{sudo gem install pkg/#{GEM}-#{VER}}
+end
+
+task :clean do
+  sh %{rm -rf pkg}
+  Dir.chdir("ext/") { sh %{make clean && rm -f Makefile} }
+end
+
+Rake::RDocTask.new do |rd|
+  rd.main = "README"
+  rd.rdoc_files.include("README", "lib/*.rb")
+  rd.rdoc_dir = 'doc'
+  rd.options = spec.rdoc_options
 end

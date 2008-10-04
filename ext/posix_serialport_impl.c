@@ -49,8 +49,7 @@ static int get_fd_helper(obj)
    return (fileno(fptr->f));
 }
 
-static VALUE sp_create_impl(class, _port)
-   VALUE class, _port;
+VALUE sp_create(VALUE class, VALUE _port)
 {
    OpenFile *fp;
    int fd;
@@ -141,9 +140,7 @@ static VALUE sp_create_impl(class, _port)
    return (VALUE) sp;
 }
 
-static VALUE sp_set_modem_params_impl(argc, argv, self)
-   int argc;
-   VALUE *argv, self;
+VALUE sp_set_modem_params(int argc, VALUE *argv, VALUE self)
 {
    int fd;
    struct termios params;
@@ -326,9 +323,7 @@ static VALUE sp_set_modem_params_impl(argc, argv, self)
    return argv[0];
 }
 
-static void get_modem_params_impl(self, mp)
-   VALUE self;
-   struct modem_params *mp;
+void get_modem_params(VALUE self, struct modem_params *mp)
 {
    int fd;
    struct termios params;
@@ -405,8 +400,7 @@ static void get_modem_params_impl(self, mp)
    }
 }
 
-static VALUE sp_set_flow_control_impl(self, val)
-   VALUE self, val;
+VALUE sp_set_flow_control(VALUE self, VALUE val)
 {
    int fd;
    int flowc;
@@ -452,8 +446,7 @@ static VALUE sp_set_flow_control_impl(self, val)
    return val;
 }
 
-static VALUE sp_get_flow_control_impl(self)
-   VALUE self;
+VALUE sp_get_flow_control(VALUE self)
 {
    int ret;
    int fd;
@@ -482,8 +475,7 @@ static VALUE sp_get_flow_control_impl(self)
    return INT2FIX(ret);
 }
 
-static VALUE sp_set_read_timeout_impl(self, val)
-   VALUE self, val;
+VALUE sp_set_read_timeout(VALUE self, VALUE val)
 {
    int timeout;
    int fd;
@@ -522,8 +514,7 @@ static VALUE sp_set_read_timeout_impl(self, val)
    return val;
 }
 
-static VALUE sp_get_read_timeout_impl(self)
-   VALUE self;
+VALUE sp_get_read_timeout(VALUE self)
 {
    int fd;
    struct termios params;
@@ -542,22 +533,19 @@ static VALUE sp_get_read_timeout_impl(self)
    return INT2FIX(params.c_cc[VTIME] * 100);
 }
 
-static VALUE sp_set_write_timeout_impl(self, val)
-   VALUE self, val;
+VALUE sp_set_write_timeout(VALUE self, VALUE val)
 {
    rb_notimplement();
    return self;
 }
 
-static VALUE sp_get_write_timeout_impl(self)
-   VALUE self;
+VALUE sp_get_write_timeout(VALUE self)
 {
    rb_notimplement();
    return self;
 }
 
-static VALUE sp_break_impl(self, time)
-   VALUE self, time;
+VALUE sp_break(VALUE self, VALUE time)
 {
    int fd;
 
@@ -573,9 +561,7 @@ static VALUE sp_break_impl(self, time)
    return Qnil;
 }
 
-static void get_line_signals_helper_impl(obj, ls)
-   VALUE obj;
-   struct line_signals *ls;
+void get_line_signals_helper(VALUE obj, struct line_signals *ls)
 {
    int fd, status;
 
@@ -594,9 +580,7 @@ static void get_line_signals_helper_impl(obj, ls)
    ls->ri  = (status & TIOCM_RI ? 1 : 0);
 }
 
-static VALUE set_signal_impl(obj, val, sig)
-   VALUE obj,val;
-   int sig;
+VALUE set_signal(VALUE obj, VALUE val, int sig)
 {
    int status;
    int fd;
@@ -633,20 +617,17 @@ static VALUE set_signal_impl(obj, val, sig)
    return val;
 }
 
-static VALUE sp_set_rts_impl(self, val)
-   VALUE self, val;
+VALUE sp_set_rts(VALUE self, VALUE val)
 {
    return set_signal(self, val, TIOCM_RTS);
 }
 
-static VALUE sp_set_dtr_impl(self, val)
-   VALUE self, val;
+VALUE sp_set_dtr(VALUE self, VALUE val)
 {
    return set_signal(self, val, TIOCM_DTR);
 }
 
-static VALUE sp_get_rts_impl(self)
-   VALUE self;
+VALUE sp_get_rts(VALUE self)
 {
    struct line_signals ls;
 
@@ -654,8 +635,7 @@ static VALUE sp_get_rts_impl(self)
    return INT2FIX(ls.rts);
 }
 
-static VALUE sp_get_dtr_impl(self)
-   VALUE self;
+VALUE sp_get_dtr(VALUE self)
 {
    struct line_signals ls;
 
