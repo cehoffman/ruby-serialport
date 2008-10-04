@@ -21,8 +21,8 @@ task :clean do
 end
 
 Rake::RDocTask.new do |rd|
-  rd.main = "README"
-  rd.rdoc_files.include("README", "lib/*.rb")
+  rd.main = "README.rdoc"
+  rd.rdoc_files.include("README.rdoc", "lib/*.rb")
   rd.rdoc_dir = 'doc'
   rd.options = spec.rdoc_options
 end

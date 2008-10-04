@@ -2,6 +2,7 @@
  * Guillaume Pierronnet <moumar@netcourrier.com>
  * Alan Stern <stern@rowland.harvard.edu>
  * Daniel E. Shipton <dshipton@redshiptechnologies.com>
+ * Chris Hoffman <cehoffman@gmail.com>
  *
  * This code is hereby licensed for public consumption under either the
  * GNU GPL v2 or greater.
@@ -60,16 +61,16 @@ VALUE sp_create(VALUE class, VALUE _port)
       "/dev/ttyS0", "/dev/ttyS1", "/dev/ttyS2", "/dev/ttyS3",
       "/dev/ttyS4", "/dev/ttyS5", "/dev/ttyS6", "/dev/ttyS7"
 #elif defined(OS_FREEBSD) || defined(OS_NETBSD) || defined(OS_OPENBSD)
-         "/dev/cuaa0", "/dev/cuaa1", "/dev/cuaa2", "/dev/cuaa3",
+      "/dev/cuaa0", "/dev/cuaa1", "/dev/cuaa2", "/dev/cuaa3",
       "/dev/cuaa4", "/dev/cuaa5", "/dev/cuaa6", "/dev/cuaa7"
 #elif defined(OS_SOLARIS)
-         "/dev/ttya", "/dev/ttyb", "/dev/ttyc", "/dev/ttyd",
+      "/dev/ttya", "/dev/ttyb", "/dev/ttyc", "/dev/ttyd",
       "/dev/ttye", "/dev/ttyf", "/dev/ttyg", "/dev/ttyh"
 #elif defined(OS_AIX)
-         "/dev/tty0", "/dev/tty1", "/dev/tty2", "/dev/tty3",
+      "/dev/tty0", "/dev/tty1", "/dev/tty2", "/dev/tty3",
       "/dev/tty4", "/dev/tty5", "/dev/tty6", "/dev/tty7"
 #elif defined(OS_IRIX)
-         "/dev/ttyf1", "/dev/ttyf2", "/dev/ttyf3", "/dev/ttyf4",
+      "/dev/ttyf1", "/dev/ttyf2", "/dev/ttyf3", "/dev/ttyf4",
       "/dev/ttyf5", "/dev/ttyf6", "/dev/ttyf7", "/dev/ttyf8"
 #endif
    };
@@ -127,6 +128,13 @@ VALUE sp_create(VALUE class, VALUE _port)
    params.c_iflag &= (IXON | IXOFF | IXANY);
    params.c_cflag |= CLOCAL | CREAD;
    params.c_cflag &= ~HUPCL;
+   
+   /* Cause a read of the serial port wait for either the number
+    * of requested bytes to be read, or for .1*c_cc[TIME] sec to
+    * elpase since last received byte. */
+   // TODO: Look to see if this makes sense for intended use of library
+   //params.c_cc[MIN] = 0;
+   //params.c_cc[TIME] = 1;
 
    if (tcsetattr(fd, TCSANOW, &params) == -1)
    {

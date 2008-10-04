@@ -2,6 +2,7 @@
  * Guillaume Pierronnet <moumar@netcourrier.com>
  * Alan Stern <stern@rowland.harvard.edu>
  * Daniel E. Shipton <dshipton@redshiptechnologies.com>
+ * Chris Hoffman <cehoffman@gmail.com>
  *
  * This code is hereby licensed for public consumption under either the
  * GNU GPL v2 or greater.
