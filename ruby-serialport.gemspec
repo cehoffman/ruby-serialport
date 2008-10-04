@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.summary = SUMMARY
   s.description = s.summary
 
-  s.files = FileList["LICENSE", "CHANGELOG", "README.rdoc", "lib/serialport.rb", "ext/extconf.rb", "ext/serialport.c", "ext/serialport.h", "ext/posix_serialport_impl.c", "ext/win_serialport_impl.c", "test/miniterm.rb"]
+  s.files = ["LICENSE", "CHANGELOG", "README.rdoc", "lib/serialport.rb", "ext/extconf.rb", "ext/serialport.c", "ext/serialport.h", "ext/posix_serialport_impl.c", "ext/win_serialport_impl.c", "test/miniterm.rb"]
   s.test_files = ["test/miniterm.rb"]
   s.extensions = ['ext/extconf.rb']
   s.has_rdoc = true
